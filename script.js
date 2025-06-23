@@ -192,12 +192,14 @@ const style = document.createElement('style');
 style.textContent = `
     .nav-link.active {
         color: #860d0d !important;
-        text-shadow: 0 0 10px #860d0d !important;
     }
     .nav-link.active::after {
         width: 100% !important;
     }
-
+    .nav-link.active::before {
+        opacity: 1 !important;
+        left: -25px !important;
+    }
 `;
 document.head.appendChild(style);
 
@@ -283,28 +285,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData(signupForm);
             const name = formData.get('name');
             const email = formData.get('email');
-            const phone = formData.get('phone');
+            const wantsUpdates = formData.get('updates') === 'on';
             
             // Get the submit button
             const submitBtn = signupForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
             // Show loading state
-            submitBtn.textContent = 'Signing Up...';
+            submitBtn.textContent = 'Joining...';
             submitBtn.disabled = true;
             submitBtn.style.opacity = '0.7';
             
-            // Simulate form submission (replace with actual form handling)
+            // Save email to local storage (and send to your email service)
+            saveEmailToList(name, email, wantsUpdates);
+            
+            // Simulate form submission
             setTimeout(() => {
                 // Success state
-                submitBtn.textContent = 'Signed Up! ✓';
+                submitBtn.textContent = 'Joined! ♠';
                 submitBtn.style.background = '#860d0d';
                 
                 // Show success message
-                showNotification('Thanks for signing up! We\'ll keep you posted on our Jacksonville shows and tours.', 'success');
+                showNotification('Welcome to the Offsuit email list! You\'ll be the first to know about our Jacksonville shows and new releases.', 'success');
                 
                 // Reset form
                 signupForm.reset();
+                // Re-check the updates checkbox by default
+                document.getElementById('updates').checked = true;
                 
                 // Reset button after delay
                 setTimeout(() => {
@@ -314,12 +321,201 @@ document.addEventListener('DOMContentLoaded', () => {
                     submitBtn.style.background = '';
                 }, 3000);
                 
-                // Here you would normally send the data to your email service
-                console.log('Newsletter signup:', { name, email, phone });
+                // Log the current email list size
+                const emailList = getEmailList();
+                console.log(`Email list now has ${emailList.length} subscribers`);
             }, 1500);
         });
     }
 });
+
+// Email list management functions
+function saveEmailToList(name, email, wantsUpdates) {
+    // Get existing email list from localStorage
+    let emailList = JSON.parse(localStorage.getItem('offsuitEmailList') || '[]');
+    
+    // Check if email already exists
+    const existingIndex = emailList.findIndex(subscriber => subscriber.email === email);
+    
+    const subscriberData = {
+        name: name,
+        email: email,
+        wantsUpdates: wantsUpdates,
+        dateAdded: new Date().toISOString(),
+        source: 'website'
+    };
+    
+    if (existingIndex >= 0) {
+        // Update existing subscriber
+        emailList[existingIndex] = { ...emailList[existingIndex], ...subscriberData };
+    } else {
+        // Add new subscriber
+        emailList.push(subscriberData);
+    }
+    
+    // Save back to localStorage
+    localStorage.setItem('offsuitEmailList', JSON.stringify(emailList));
+    
+    // Also send to your email service (replace with your actual service)
+    sendToEmailService(subscriberData);
+}
+
+function getEmailList() {
+    return JSON.parse(localStorage.getItem('offsuitEmailList') || '[]');
+}
+
+function exportEmailList() {
+    const emailList = getEmailList();
+    const csvContent = "data:text/csv;charset=utf-8," 
+        + "Name,Email,Wants Updates,Date Added,Source\n"
+        + emailList.map(sub => 
+            `"${sub.name}","${sub.email}","${sub.wantsUpdates}","${sub.dateAdded}","${sub.source}"`
+        ).join("\n");
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "offsuit_email_list.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function sendToEmailService(subscriberData) {
+    // REPLACE THIS WITH YOUR ACTUAL EMAIL SERVICE
+    
+    // Option 1: Mailchimp API
+    /*
+    fetch('https://us1.api.mailchimp.com/3.0/lists/YOUR_LIST_ID/members', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer YOUR_API_KEY',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            email_address: subscriberData.email,
+            status: 'subscribed',
+            merge_fields: {
+                FNAME: subscriberData.name
+            }
+        })
+    });
+    */
+    
+    // Option 2: ConvertKit API
+    /*
+    fetch('https://api.convertkit.com/v3/forms/YOUR_FORM_ID/subscribe', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            api_key: 'YOUR_API_KEY',
+            email: subscriberData.email,
+            first_name: subscriberData.name
+        })
+    });
+    */
+    
+    // Option 3: Netlify Forms (if hosted on Netlify)
+    /*
+    fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+            'form-name': 'newsletter',
+            'name': subscriberData.name,
+            'email': subscriberData.email
+        })
+    });
+    */
+    
+    console.log('Subscriber data ready for email service:', subscriberData);
+}
+
+// Admin panel functions
+function updateAdminStats() {
+    const list = getEmailList();
+    const recentSignups = list.filter(s => 
+        new Date(s.dateAdded) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    ).length;
+    
+    document.getElementById('total-subscribers').textContent = list.length;
+    document.getElementById('recent-signups').textContent = recentSignups;
+}
+
+function toggleEmailList() {
+    const display = document.getElementById('email-list-display');
+    if (display.style.display === 'none') {
+        displayEmailList();
+        display.style.display = 'block';
+    } else {
+        display.style.display = 'none';
+    }
+}
+
+function displayEmailList() {
+    const list = getEmailList();
+    const display = document.getElementById('email-list-display');
+    
+    if (list.length === 0) {
+        display.innerHTML = '<p style="color: #999;">No subscribers yet.</p>';
+        return;
+    }
+    
+    const html = list.map(subscriber => `
+        <div class="email-entry">
+            <strong>${subscriber.name}</strong> - ${subscriber.email}<br>
+            <small>
+                Joined: ${new Date(subscriber.dateAdded).toLocaleDateString()} | 
+                Updates: ${subscriber.wantsUpdates ? 'Yes' : 'No'}
+            </small>
+        </div>
+    `).join('');
+    
+    display.innerHTML = html;
+}
+
+// Console commands for managing email list
+window.offsuitEmailAdmin = {
+    getList: getEmailList,
+    exportList: exportEmailList,
+    clearList: () => {
+        if (confirm('Are you sure you want to clear the entire email list?')) {
+            localStorage.removeItem('offsuitEmailList');
+            updateAdminStats();
+            console.log('Email list cleared');
+        }
+    },
+    getStats: () => {
+        const list = getEmailList();
+        const stats = {
+            total: list.length,
+            wantsUpdates: list.filter(s => s.wantsUpdates).length,
+            recentSignups: list.filter(s => 
+                new Date(s.dateAdded) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+            ).length
+        };
+        console.log('Email List Stats:', stats);
+        updateAdminStats();
+        return stats;
+    },
+    showAdmin: () => {
+        const adminPanel = document.getElementById('email-admin');
+        if (adminPanel) {
+            adminPanel.style.display = 'block';
+            updateAdminStats();
+            console.log('Admin panel shown. Use offsuitEmailAdmin.hideAdmin() to hide.');
+        }
+    },
+    hideAdmin: () => {
+        const adminPanel = document.getElementById('email-admin');
+        if (adminPanel) {
+            adminPanel.style.display = 'none';
+            console.log('Admin panel hidden.');
+        }
+    }
+};
 
 // Notification system
 function showNotification(message, type = 'info') {

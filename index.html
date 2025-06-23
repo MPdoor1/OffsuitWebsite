@@ -310,11 +310,15 @@
             <h2 class="section-title">Stay Connected</h2>
             <div class="newsletter-content">
                 <div class="newsletter-text">
-                    <h3 class="newsletter-heading">Get Direct Notifications</h3>
+                    <h3 class="newsletter-heading">Get Direct Email Notifications</h3>
                     <p class="newsletter-description">
-                        Be the first to know where we're playing next! Based in Jacksonville, we're always hitting new venues and want to make sure our fans don't miss out. Sign up for direct notifications about our upcoming shows and exclusive updates.
+                        Be the first to know where we're playing next! Based in Jacksonville, we're always hitting new venues and want to make sure our fans don't miss out. Sign up for our exclusive email list to get direct notifications about upcoming shows, new releases, and behind-the-scenes content.
                     </p>
                     <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>Direct email updates</span>
+                        </div>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <span>Based in Jacksonville, FL</span>
@@ -331,14 +335,39 @@
                             <input type="text" id="name" name="name" placeholder="Your Name" required>
                         </div>
                         <div class="form-group">
-                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                            <input type="email" id="email" name="email" placeholder="Your Email Address" required>
                         </div>
                         <div class="form-group">
-                            <input type="tel" id="phone" name="phone" placeholder="Phone Number (Optional)">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="updates" name="updates" checked>
+                                <span class="checkmark"></span>
+                                Send me updates about new releases and exclusive content
+                            </label>
                         </div>
-                        <button type="submit" class="btn btn-primary">Get Notifications</button>
-                        <p class="form-disclaimer">We respect your privacy. Unsubscribe at any time.</p>
+                        <button type="submit" class="btn btn-primary">Join Email List</button>
+                        <p class="form-disclaimer">We respect your privacy. Unsubscribe at any time. No spam, just the good stuff.</p>
                     </form>
+                    
+                    <!-- Email List Admin (Hidden by default) -->
+                    <div id="email-admin" class="email-admin" style="display: none;">
+                        <h4>Email List Management</h4>
+                        <div class="admin-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" id="total-subscribers">0</span>
+                                <span class="stat-label">Total Subscribers</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="recent-signups">0</span>
+                                <span class="stat-label">This Week</span>
+                            </div>
+                        </div>
+                        <div class="admin-buttons">
+                            <button onclick="offsuitEmailAdmin.exportList()" class="btn btn-secondary btn-small">Export CSV</button>
+                            <button onclick="offsuitEmailAdmin.getStats()" class="btn btn-secondary btn-small">View Stats</button>
+                            <button onclick="toggleEmailList()" class="btn btn-secondary btn-small">View List</button>
+                        </div>
+                                                 <div id="email-list-display" style="display: none;"></div>
+                     </div>
                 </div>
             </div>
         </div>
