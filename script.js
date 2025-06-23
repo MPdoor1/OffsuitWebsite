@@ -94,14 +94,14 @@ document.querySelectorAll('.merch-item .btn').forEach(button => {
         const merchName = button.closest('.merch-item').querySelector('.merch-name').textContent;
         
         // Simple cart simulation
-        button.textContent = 'Added! ♠';
+        button.textContent = 'Added!';
         button.style.background = '#860d0d';
-        button.style.boxShadow = '0 0 20px #860d0d';
+        button.style.transform = 'scale(0.95)';
         
         setTimeout(() => {
             button.textContent = 'Add to Cart';
             button.style.background = '';
-            button.style.boxShadow = '';
+            button.style.transform = '';
         }, 2000);
         
         // Here you would normally integrate with a shopping cart system
@@ -197,10 +197,7 @@ style.textContent = `
     .nav-link.active::after {
         width: 100% !important;
     }
-    .nav-link.active::before {
-        opacity: 1 !important;
-        left: -25px !important;
-    }
+
 `;
 document.head.appendChild(style);
 
@@ -225,11 +222,12 @@ window.addEventListener('load', () => {
             transition: opacity 0.5s ease;
         ">
             <div style="
-                font-size: 3rem;
+                font-size: 1.2rem;
                 color: #860d0d;
                 margin-bottom: 2rem;
-                animation: suitSpin 2s linear infinite;
-            ">♠ ♥ ♦ ♣</div>
+                font-weight: 600;
+                letter-spacing: 3px;
+            ">OFFSUIT</div>
             <div style="
                 width: 50px;
                 height: 50px;
@@ -244,11 +242,7 @@ window.addEventListener('load', () => {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
             }
-            @keyframes suitSpin {
-                0% { transform: rotate(0deg) scale(1); }
-                50% { transform: rotate(180deg) scale(1.2); }
-                100% { transform: rotate(360deg) scale(1); }
-            }
+
         </style>
     `;
     

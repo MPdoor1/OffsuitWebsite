@@ -18,26 +18,19 @@ body {
     position: relative;
 }
 
-/* Card Suit Decorations */
+/* Subtle background pattern */
 body::before {
-    content: '♠ ♥ ♦ ♣ ♠ ♥ ♦ ♣ ♠ ♥ ♦ ♣';
+    content: '';
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    font-size: 2rem;
-    color: rgba(134, 13, 13, 0.05);
+    background: radial-gradient(circle at 20% 50%, rgba(134, 13, 13, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(134, 13, 13, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(134, 13, 13, 0.03) 0%, transparent 50%);
     z-index: -1;
     pointer-events: none;
-    animation: floatingSuits 20s linear infinite;
-    line-height: 4rem;
-    word-spacing: 2rem;
-}
-
-@keyframes floatingSuits {
-    0% { transform: translateY(100vh) rotate(0deg); }
-    100% { transform: translateY(-100vh) rotate(360deg); }
 }
 
 .container {
@@ -56,13 +49,7 @@ body::before {
     z-index: 1000;
     padding: 1rem 0;
     transition: all 0.3s ease;
-    border-bottom: 2px solid transparent;
-    animation: navGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes navGlow {
-    0% { border-bottom-color: transparent; }
-    100% { border-bottom-color: #860d0d; }
+    border-bottom: 1px solid rgba(134, 13, 13, 0.2);
 }
 
 .nav-container {
@@ -108,7 +95,6 @@ body::before {
 
 .nav-link:hover {
     color: #860d0d;
-    text-shadow: 0 0 10px #860d0d;
 }
 
 .nav-link::after {
@@ -120,25 +106,10 @@ body::before {
     left: 0;
     background-color: #860d0d;
     transition: width 0.3s ease;
-    box-shadow: 0 0 5px #860d0d;
 }
 
 .nav-link:hover::after {
     width: 100%;
-}
-
-.nav-link::before {
-    content: '♠';
-    position: absolute;
-    left: -20px;
-    opacity: 0;
-    transition: all 0.3s ease;
-    color: #860d0d;
-}
-
-.nav-link:hover::before {
-    opacity: 1;
-    left: -25px;
 }
 
 .nav-toggle {
@@ -168,20 +139,22 @@ body::before {
 }
 
 .hero::after {
-    content: '♥ ♦ ♣ ♠';
+    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 15rem;
-    color: rgba(134, 13, 13, 0.1);
+    width: 300px;
+    height: 300px;
+    border: 1px solid rgba(134, 13, 13, 0.1);
+    border-radius: 50%;
     z-index: 1;
-    animation: pulseSuits 4s ease-in-out infinite;
+    animation: subtlePulse 4s ease-in-out infinite;
 }
 
-@keyframes pulseSuits {
+@keyframes subtlePulse {
     0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; }
-    50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.2; }
+    50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.2; }
 }
 
 .hero-overlay {
@@ -204,14 +177,13 @@ body::before {
     height: auto;
     margin-bottom: 2rem;
     border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(134, 13, 13, 0.5);
-    filter: drop-shadow(0 0 20px #860d0d);
-    animation: logoFloat 3s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(134, 13, 13, 0.3);
+    transition: all 0.3s ease;
 }
 
-@keyframes logoFloat {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+.hero-logo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(134, 13, 13, 0.4);
 }
 
 .hero-title {
@@ -225,12 +197,6 @@ body::before {
     letter-spacing: 5px;
     position: relative;
     z-index: 3;
-    animation: titleGlow 2s ease-in-out infinite alternate;
-}
-
-@keyframes titleGlow {
-    0% { filter: drop-shadow(0 0 5px #860d0d); }
-    100% { filter: drop-shadow(0 0 20px #860d0d); }
 }
 
 .hero-subtitle {
@@ -277,25 +243,9 @@ body::before {
     overflow: hidden;
 }
 
-.btn-primary::before {
-    content: '♠';
-    position: absolute;
-    left: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
-    opacity: 0;
-}
-
-.btn-primary:hover::before {
-    left: 10px;
-    opacity: 1;
-}
-
 .btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(134, 13, 13, 0.6);
-    padding-left: 35px;
 }
 
 .btn-secondary {
@@ -306,28 +256,11 @@ body::before {
     overflow: hidden;
 }
 
-.btn-secondary::before {
-    content: '♥';
-    position: absolute;
-    right: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: all 0.3s ease;
-    opacity: 0;
-    color: #860d0d;
-}
-
-.btn-secondary:hover::before {
-    right: 10px;
-    opacity: 1;
-}
-
 .btn-secondary:hover {
     background: #860d0d;
     color: #ffffff;
     transform: translateY(-2px);
-    padding-right: 35px;
-    box-shadow: 0 0 20px #860d0d;
+    box-shadow: 0 0 20px rgba(134, 13, 13, 0.5);
 }
 
 .btn-small {
@@ -346,15 +279,14 @@ body::before {
 }
 
 .section-dark::before {
-    content: '♦ ♣ ♦ ♣ ♦ ♣';
+    content: '';
     position: absolute;
-    top: 20px;
+    top: 0;
     left: 0;
     width: 100%;
-    text-align: center;
-    font-size: 1.5rem;
-    color: rgba(134, 13, 13, 0.1);
-    animation: slideAcross 15s linear infinite;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(134, 13, 13, 0.3), transparent);
+    animation: slideAcross 8s linear infinite;
 }
 
 @keyframes slideAcross {
@@ -375,18 +307,14 @@ body::before {
 }
 
 .section-title::after {
-    content: '♠';
+    content: '';
     position: absolute;
-    top: -10px;
-    right: -30px;
-    font-size: 2rem;
-    color: #860d0d;
-    animation: rotateSuit 3s ease-in-out infinite;
-}
-
-@keyframes rotateSuit {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(180deg); }
+    top: 50%;
+    right: -10px;
+    width: 4px;
+    height: 30px;
+    background: #860d0d;
+    transform: translateY(-50%);
 }
 
 /* Band Members */
@@ -407,18 +335,20 @@ body::before {
 }
 
 .member-card::before {
-    content: '♥';
+    content: '';
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: 1.5rem;
-    color: rgba(134, 13, 13, 0.3);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(134, 13, 13, 0.3);
     transition: all 0.3s ease;
 }
 
 .member-card:hover::before {
-    transform: scale(1.5) rotate(360deg);
-    color: #860d0d;
+    background: #860d0d;
+    transform: scale(1.5);
 }
 
 .member-card:hover {
@@ -458,7 +388,6 @@ body::before {
     color: #860d0d;
     font-weight: 500;
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(134, 13, 13, 0.5);
 }
 
 .member-bio {
@@ -549,16 +478,7 @@ body::before {
     position: relative;
 }
 
-.release-type::before {
-    content: '♦';
-    margin-right: 5px;
-    animation: twinkle 2s ease-in-out infinite;
-}
 
-@keyframes twinkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.2); }
-}
 
 /* Timeline */
 .schedule-timeline {
@@ -599,20 +519,7 @@ body::before {
     box-shadow: 0 0 20px rgba(134, 13, 13, 0.5);
 }
 
-.timeline-date::before {
-    content: '♣';
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    font-size: 0.8rem;
-    color: #ffffff;
-    animation: spin 4s linear infinite;
-}
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 
 .date-month {
     display: block;
@@ -665,15 +572,7 @@ body::before {
     position: relative;
 }
 
-.timeline-type::after {
-    content: '♠';
-    position: absolute;
-    right: -15px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.7rem;
-    color: #860d0d;
-}
+
 
 /* Tour Dates */
 .tour-dates {
@@ -717,20 +616,7 @@ body::before {
     position: relative;
 }
 
-.tour-day::before {
-    content: '♥';
-    position: absolute;
-    top: -5px;
-    right: -15px;
-    font-size: 0.8rem;
-    color: rgba(134, 13, 13, 0.6);
-    animation: heartbeat 2s ease-in-out infinite;
-}
 
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-}
 
 .tour-month {
     display: block;
@@ -758,11 +644,7 @@ body::before {
     position: relative;
 }
 
-.tour-time::before {
-    content: '♦';
-    margin-right: 5px;
-    animation: twinkle 2s ease-in-out infinite;
-}
+
 
 /* Streaming Platforms */
 .streaming-platforms {
@@ -859,20 +741,7 @@ body::before {
     position: relative;
 }
 
-.merch-price::before {
-    content: '♣';
-    position: absolute;
-    left: -20px;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 1rem;
-    animation: bounce 2s ease-in-out infinite;
-}
 
-@keyframes bounce {
-    0%, 100% { transform: translateY(-50%) translateX(0); }
-    50% { transform: translateY(-50%) translateX(5px); }
-}
 
 /* Footer */
 .footer {
@@ -882,19 +751,14 @@ body::before {
 }
 
 .footer::before {
-    content: '♠ ♥ ♦ ♣';
+    content: '';
     position: absolute;
-    top: 20px;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.2rem;
-    color: rgba(134, 13, 13, 0.3);
-    animation: fadeInOut 4s ease-in-out infinite;
-}
-
-@keyframes fadeInOut {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.8; }
+    width: 60px;
+    height: 1px;
+    background: #860d0d;
 }
 
 .footer-content {
