@@ -272,9 +272,97 @@ document.querySelectorAll('.social-link').forEach(link => {
     });
 });
 
-// Add form handling for contact (if you add a contact form later)
+// Newsletter signup form handling
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('email-signup');
+    
+    if (signupForm) {
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(signupForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const phone = formData.get('phone');
+            
+            // Get the submit button
+            const submitBtn = signupForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            // Show loading state
+            submitBtn.textContent = 'Signing Up...';
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.7';
+            
+            // Simulate form submission (replace with actual form handling)
+            setTimeout(() => {
+                // Success state
+                submitBtn.textContent = 'Signed Up! ✓';
+                submitBtn.style.background = '#860d0d';
+                
+                // Show success message
+                showNotification('Thanks for signing up! We\'ll keep you posted on our Jacksonville shows and tours.', 'success');
+                
+                // Reset form
+                signupForm.reset();
+                
+                // Reset button after delay
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '';
+                    submitBtn.style.background = '';
+                }, 3000);
+                
+                // Here you would normally send the data to your email service
+                console.log('Newsletter signup:', { name, email, phone });
+            }, 1500);
+        });
+    }
+});
+
+// Notification system
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: ${type === 'success' ? '#860d0d' : '#333'};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        max-width: 300px;
+        font-size: 0.9rem;
+        line-height: 1.4;
+    `;
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after delay
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
+
+// Add form handling for contact
 function handleFormSubmit(formData) {
-    // This is where you'd handle form submissions
     console.log('Form submitted:', formData);
 }
 
