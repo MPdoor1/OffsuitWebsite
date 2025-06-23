@@ -33,11 +33,13 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 100) {
-        navbar.style.background = 'rgba(10, 10, 10, 0.98)';
-        navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.98)';
+        navbar.style.boxShadow = '0 2px 20px rgba(134, 13, 13, 0.3)';
+        navbar.style.borderBottomColor = '#860d0d';
     } else {
-        navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+        navbar.style.background = 'rgba(0, 0, 0, 0.95)';
         navbar.style.boxShadow = 'none';
+        navbar.style.borderBottomColor = 'transparent';
     }
 });
 
@@ -92,12 +94,14 @@ document.querySelectorAll('.merch-item .btn').forEach(button => {
         const merchName = button.closest('.merch-item').querySelector('.merch-name').textContent;
         
         // Simple cart simulation
-        button.textContent = 'Added!';
-        button.style.background = '#4CAF50';
+        button.textContent = 'Added! ♠';
+        button.style.background = '#860d0d';
+        button.style.boxShadow = '0 0 20px #860d0d';
         
         setTimeout(() => {
             button.textContent = 'Add to Cart';
             button.style.background = '';
+            button.style.boxShadow = '';
         }, 2000);
         
         // Here you would normally integrate with a shopping cart system
@@ -187,10 +191,15 @@ window.addEventListener('scroll', () => {
 const style = document.createElement('style');
 style.textContent = `
     .nav-link.active {
-        color: #ff6b6b !important;
+        color: #860d0d !important;
+        text-shadow: 0 0 10px #860d0d !important;
     }
     .nav-link.active::after {
         width: 100% !important;
+    }
+    .nav-link.active::before {
+        opacity: 1 !important;
+        left: -25px !important;
     }
 `;
 document.head.appendChild(style);
@@ -206,8 +215,9 @@ window.addEventListener('load', () => {
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0a0a;
+            background: #000000;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 9999;
@@ -215,10 +225,16 @@ window.addEventListener('load', () => {
             transition: opacity 0.5s ease;
         ">
             <div style="
+                font-size: 3rem;
+                color: #860d0d;
+                margin-bottom: 2rem;
+                animation: suitSpin 2s linear infinite;
+            ">♠ ♥ ♦ ♣</div>
+            <div style="
                 width: 50px;
                 height: 50px;
                 border: 3px solid #333;
-                border-top: 3px solid #ff6b6b;
+                border-top: 3px solid #860d0d;
                 border-radius: 50%;
                 animation: spin 1s linear infinite;
             "></div>
@@ -227,6 +243,11 @@ window.addEventListener('load', () => {
             @keyframes spin {
                 0% { transform: rotate(0deg); }
                 100% { transform: rotate(360deg); }
+            }
+            @keyframes suitSpin {
+                0% { transform: rotate(0deg) scale(1); }
+                50% { transform: rotate(180deg) scale(1.2); }
+                100% { transform: rotate(360deg) scale(1); }
             }
         </style>
     `;
